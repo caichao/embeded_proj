@@ -57,7 +57,7 @@ def readLight(addr=DEVICE):
 def main():
 
   while True:
-    print "Light Level : " + str(readLight()) + " lx"
+    print ("Light Level : " + str(readLight()) + " lx")
     time.sleep(0.5)
   
 if __name__=="__main__":
