@@ -2,10 +2,45 @@ import threading
 from time import sleep,ctime
 import RPi.GPIO as GPIO
 
+#-----------------------global vars-----------------------------
 red = 16
 green = 20
 blue = 21
+LOW = 0
+HIGH = 1
+#GPIO.setmode(GPIO.BCM)
 
+#mutex = threading.Lock()
+#-----------------------function area---------------------------
+def toggle(channel):
+    
+    #mutex.acquire()
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(channel,GPIO.OUT,initial=GPIO.OUT)
+    GPIO.output(channel,LOW)
+    #mutex.release()
+    sleep(1)
+    #mutex.acquire()
+    GPIO.output(channel,HIGH)
+    #sleep(1)
+    GPIO.cleanup()
+    #mutex.release()
+    
+def flash(channel):
+    
+    #mutex.acquire()
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(channel,GPIO.OUT,initial=GPIO.OUT)
+    GPIO.output(channel,LOW)
+    #mutex.release()
+    sleep(0.08)
+    #mutex.acquire()
+    GPIO.output(channel,HIGH)
+    #sleep(1)
+    GPIO.cleanup()
+    #mutex.release()
+
+#----------------------depracated function(not safe to call)------
 def initPin():
     
     GPIO.setmode(GPIO.BCM)
