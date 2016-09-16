@@ -1,0 +1,6 @@
+get sensor information error at:Fri Sep 16 12:51:07 2016
+get sensor information error at:Fri Sep 16 12:51:11 2016
+read DHT11 sensor encounter error at:Fri Sep 16 15:26:52 2016
+read DHT11 sensor encounter error at:Fri Sep 16 15:31:03 2016
+read DHT11 sensor encounter error at:Fri Sep 16 15:31:18 2016
+read DHT11 sensor encounter error at:Fri Sep 16 15:31:24 2016

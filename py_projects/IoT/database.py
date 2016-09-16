@@ -25,11 +25,11 @@ def queryListResult(location="home"):
     lock.acquire()
     conn = sqlite3.connect('sensor.db')
     cursor = conn.cursor()
-    sql = str.format('select temperature,humidity,lumiance from sensor_table where location="%s"' % location)
+    sql = str.format('select temperature,humidity,lumiance,tdatetime from sensor_table where location="%s"' % location)
     row = cursor.execute(sql)
     values = cursor.fetchall()
     print('number of queried results:',len(values))
-    print('result:',values)
+    #print('result:',values)
     cursor.close()
     conn.close()
     lock.release()
@@ -37,12 +37,14 @@ def queryListResult(location="home"):
     temperatureList = []
     humidityList = []
     lumianceList = []
+    datetimeList = []
     
     for item in values:
         temperatureList.append(item[0])
         humidityList.append(item[1])
         lumianceList.append(item[2])
-    return temperatureList,humidityList,lumianceList
+        datetimeList.append(item[3])
+    return datetimeList,temperatureList,humidityList,lumianceList
 
 def queryLatestResult():
     lock.acquire()
@@ -51,11 +53,11 @@ def queryLatestResult():
     cursor.execute('select *  from sensor_table order by tdatetime desc')
     values = cursor.fetchone()
     #print('number of queried results:',)
-    print('result:',values)
+    #print('result:',values)
     cursor.close()
     conn.close()
     lock.release()
-    return values
+    return (values[1],values[2],values[3],values[4])
 
 def insertSensorValue(temperature,humidity,lumiance,location):
     lock.acquire()

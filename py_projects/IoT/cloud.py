@@ -31,14 +31,22 @@ class MyThread(threading.Thread):
 
 #------------------------------------function area---------------------------------------------------
 
-def uploadLatestSensor(temperature,humidity,lumiance,url):
-        url = URL
-        parmeters = {'humidity':humidity,'temperature':temperature,'lumiance':lumiance,'requestType':'sensor'}
-        r = requests.get(url,params = parmeters)
-        print (r.url)
-        print (r)
-        print (r.text)
-    
+def uploadLatestSensor(temperature,humidity,lumiance):
+    url = URL
+    parmeters = {'humidity':humidity,'temperature':temperature,'lumiance':lumiance,'requestType':'sensor'}
+    r = requests.get(url,params = parmeters)
+    print (r.url)
+    print (r)
+    print (r.text)
+
+def uploadLatestPicture(path):
+    url = URL+"?requesType=image"
+    file = {'file':open(path,'rb')}
+    r = requests.post(url,files=file)
+    print (r)
+    print (r.url)
+    print (r.text)    
+
 def uploadSensorInfo():
     while True:
         temperature = 35
