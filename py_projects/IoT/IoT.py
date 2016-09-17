@@ -81,4 +81,5 @@ if __name__ == '__main__':
     #print(getUploadedUrl(35.2,24.2,54.23))
     #uploadPicture()
     #uploadSensorInfo(35,234,345)
-    main()
+##    main()
+    

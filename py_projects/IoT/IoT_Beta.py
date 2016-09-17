@@ -4,6 +4,7 @@ import threading
 import time
 import os
 import socket
+import json
 
 #------------------------custom package----------------------------
 import bh1750
@@ -87,15 +88,18 @@ class BroadcastServerThread(threading.Thread):
                 print('fetch latest')
                 time,temperature,humidity,lumiance = db.queryLatestResult()
                 
-                str_sensor = strSensorInfo(time,temperature,humidity,lumiance)
+                str_sensor = jsonSensorInfo(time,temperature,humidity,lumiance)
                 self.s.sendto(str_sensor.encode('utf-8'),addr)
                 print('already send the sensor information')
                 #print (ack)
             elif ack == self.all_sensor:
 ##                print('fetch all')
                 timeList,temperatureList,humidityList,lumianceList = db.queryListResult()
-                number_of_records = str.format('records=%d' % len(timeList))
-                self.s.sendto(number_of_records.encode('utf-8'),addr)
+##                number_of_records = str.format('records=%d' % len(timeList))
+                number_of_records = {}
+                number_of_records['records'] = len(timeList)
+                json_num = json.dumps(number_of_records)
+                self.s.sendto(json_num.encode('utf-8'),addr)
                 # if use udp here, package loss will be great, so we use tcp instead
                 # addr here contains both host address and  ports
 
@@ -109,7 +113,7 @@ class BroadcastServerThread(threading.Thread):
 ##                tcp_channel,tcp_addr = tcp.accept()
 ##        
                 for i in range(len(timeList)):
-                    str_sensor = strSensorInfo(timeList[i],temperatureList[i],humidityList[i],lumianceList[i])
+                    str_sensor = jsonSensorInfo(timeList[i],temperatureList[i],humidityList[i],lumianceList[i])
                     self.s.recvfrom(50)  #echo the ack information
                     self.s.sendto(str_sensor.encode('utf-8'),addr)
                     #self.s.recvfrom(50)
@@ -156,6 +160,14 @@ def getLumiance():
         lumiance = None
         log.recordError(log.BH1750ERR)
     return lumiance
+def jsonSensorInfo(time,temperature,humidity,lumiance):
+    json_str = {}
+    json_str['temperature'] = temperature
+    json_str['humidity'] = humidity
+    json_str['lumiance'] = lumiance
+    json_str['time'] = time
+
+    return json.dumps(json_str)
 
 def strSensorInfo(time,temperature,humidity,lumiance):
     '''sensor information in str'''

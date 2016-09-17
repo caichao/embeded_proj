@@ -4,3 +4,4 @@ read DHT11 sensor encounter error at:Fri Sep 16 15:26:52 2016
 read DHT11 sensor encounter error at:Fri Sep 16 15:31:03 2016
 read DHT11 sensor encounter error at:Fri Sep 16 15:31:18 2016
 read DHT11 sensor encounter error at:Fri Sep 16 15:31:24 2016
+read BH1750 sensor encounter error at:Sat Sep 17 13:30:11 2016
