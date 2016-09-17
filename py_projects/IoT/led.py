@@ -21,8 +21,9 @@ def toggle(channel):
     #mutex.release()
     sleep(1)
     #mutex.acquire()
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(channel,GPIO.OUT,initial=GPIO.OUT)
     GPIO.output(channel,HIGH)
-    #sleep(1)
     GPIO.cleanup()
     #mutex.release()
     

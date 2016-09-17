@@ -32,6 +32,18 @@ class MyThread(threading.Thread):
         #lock.acquire()
         self.res = self.func(*self.args)
         #lock.release()
+
+class LedBlinkThread(threading.Thread):
+    '''a led blink thread which indicate the program is normally running'''
+    def __init__(self,color):
+        threading.Thread.__init__(self)
+        self.color = color
+
+    def run(self):
+        while True:
+            led.toggle(self.color)
+            time.sleep(0.5)
+
 class MultipackageSendThread(threading.Thread):
     '''tcp channel to send all the sensor information in the database'''
     def __init__(self,host,port):
@@ -72,11 +84,12 @@ class BroadcastServerThread(threading.Thread):
 ##            print('data from client:',addr)
             #parse the request from the client
             if ack == self.latest_sensor:
-##                print('fetch latest')
+                print('fetch latest')
                 time,temperature,humidity,lumiance = db.queryLatestResult()
                 
                 str_sensor = strSensorInfo(time,temperature,humidity,lumiance)
                 self.s.sendto(str_sensor.encode('utf-8'),addr)
+                print('already send the sensor information')
                 #print (ack)
             elif ack == self.all_sensor:
 ##                print('fetch all')
@@ -141,15 +154,8 @@ def getLumiance():
     except:
         print('read lumiance error')
         lumiance = None
-        log.recordERROR(log.BH1750ERR)
+        log.recordError(log.BH1750ERR)
     return lumiance
-
-
-def ledBlink():
-    '''led blink function'''
-    while True:
-        led.toggle(led.blue)
-        time.sleep(1)
 
 def strSensorInfo(time,temperature,humidity,lumiance):
     '''sensor information in str'''
@@ -165,23 +171,26 @@ def main():
     #set a broadcasting thread
     broadcast_thread = BroadcastServerThread()
     broadcast_thread.setDaemon(True)
-    broadcast_thread.start()    
-    i = 0
-##    j = 0
+    broadcast_thread.start()
+
+    #a led blink thread
+##    blink_thread = LedBlinkThread(led.blue)
+##    blink_thread.setDaemon(True)
+##    blink_thread.start()
+
     print('Program started successfully')
     while True:
-##        j = j+1
+
         try:
             g_temperature,g_humidity = getTemperatureHumidity()
             g_lumiance = getLumiance()
             led.flash(led.green)
-            if i%10 == 0:
-                i = 0
-                if g_temperature != None and g_humidity != None and g_lumiance != None:
-                    db.insertSensorValue(g_temperature,g_humidity,g_lumiance,'home')
-##                print('insert a record')
-            i = i + 1
-            for j in range(60):
+
+            if g_temperature != None and g_humidity != None and g_lumiance != None:
+                db.insertSensorValue(g_temperature,g_humidity,g_lumiance,'home')
+
+##            time.sleep(60)
+            for i in range(60):
                 led.toggle(led.blue)
                 time.sleep(1)
         except:
