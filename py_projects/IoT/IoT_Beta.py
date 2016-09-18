@@ -93,7 +93,7 @@ class BroadcastServerThread(threading.Thread):
                 print('already send the sensor information')
                 #print (ack)
             elif ack == self.all_sensor:
-##                print('fetch all')
+                print('fetch all')
                 timeList,temperatureList,humidityList,lumianceList = db.queryListResult()
 ##                number_of_records = str.format('records=%d' % len(timeList))
                 number_of_records = {}
@@ -122,7 +122,7 @@ class BroadcastServerThread(threading.Thread):
 ##
 ##                tcp_channel.close()
 ##                tcp.close()
-                #print (ack)
+                print ("all the sensor information has been sent")
             else:
                 print('can not parse message')
             #print("ack = ",ack)
